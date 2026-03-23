@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Dashboard</h2>
+<input type="file" onchange="uploadStock(this.files[0])"><br><br>
+<input id="search" placeholder="Search..." oninput="render()"><br><br>
+
+<table border="1">
+<thead><tr><th>Material</th><th>Description</th><th>Stock</th></tr></thead>
+<tbody id="data"></tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script>
+let API = "https://YOUR-RENDER-URL.onrender.com"
+let TOKEN = localStorage.getItem("token")
+let allData=[]
+
+async function loadData(){
+let res = await fetch(API+"/data",{headers:{Authorization:TOKEN}})
+allData = await res.json()
+render()
+}
+
+function render(){
+let q = document.getElementById("search").value.toLowerCase()
+data.innerHTML=""
+allData.filter(r=>r.material.toLowerCase().includes(q)).forEach(r=>{
+data.innerHTML += `<tr><td>${r.material}</td><td>${r.desc}</td><td>${r.stock}</td></tr>`
+})
+}
+
+async function uploadStock(file){
+let form = new FormData()
+form.append("file", file)
+
+await fetch(API+"/upload-stock",{
+method:"POST",
+headers:{Authorization:TOKEN},
+body:form
+})
+
+loadData()
+}
+
+loadData()
+</script>
+
+</body>
+</html>

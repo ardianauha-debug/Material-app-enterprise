@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: material-app-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node backend/server.js

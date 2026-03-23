@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Login</h2>
+
+<input id="username" placeholder="Username"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+
+<button onclick="login()">Login</button>
+
+<script>
+let API = "https://YOUR-RENDER-URL.onrender.com"
+
+async function login(){
+let res = await fetch(API+"/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body: JSON.stringify({
+username:username.value,
+password:password.value
+})
+})
+
+let data = await res.json()
+localStorage.setItem("token", data.token)
+window.location="app.html"
+}
+</script>
+
+</body>
+</html>
